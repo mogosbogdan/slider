@@ -1,43 +1,50 @@
 import React, { useState } from 'react';
+
 function App() {
-  const initialData = Array.from({ length: 25 }, (_, i) => i + 1); // Create an array with 10 numbers
+  const [pageNumber, setPageNumber] = useState(1);
   const itemsPerPage = 8;
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(initialData.length / itemsPerPage);
-  const remainder = initialData.length % itemsPerPage;
-  let startIndex;
-  let endIndex;
-  if (currentPage === 1) {
-    startIndex = 0;
-    endIndex = remainder || itemsPerPage;
-  } else {
-    startIndex = remainder === 0 ? remainder + itemsPerPage : remainder + (currentPage - 2) * itemsPerPage;
-    endIndex = startIndex + itemsPerPage;
-  }
-  const currentData = initialData.slice(startIndex, endIndex);
-  const goToPage = (page) => {
-    setCurrentPage(page);
+
+  // Create an array of 10 numbers
+  const data = Array.from({ length: 10 }, (_, index) => index + 1);
+
+  // Calculate the index range for the current page
+  const startIndex = (pageNumber - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  // Slice the data array to display 8 numbers on the current page
+  const pageData = data.slice(startIndex, endIndex);
+
+  // Handle next and previous page actions
+  const nextPage = () => {
+    if (pageNumber < Math.ceil(data.length / itemsPerPage)) {
+      setPageNumber(pageNumber + 1);
+    }
   };
+
+  const prevPage = () => {
+    if (pageNumber > 1) {
+      setPageNumber(pageNumber - 1);
+    }
+  };
+
   return (
     <div>
+      <h1>Numbers</h1>
       <ul>
-        {currentData.map((number, index) => (
-          <li key={index}>{number}</li>
+        {pageData.map((number) => (
+          <li key={number}>{number}</li>
         ))}
       </ul>
-      <button
-        disabled={currentPage === 1}
-        onClick={() => goToPage(currentPage - 1)}
-      >
-        Previous
-      </button>
-      <button
-        disabled={currentPage === totalPages}
-        onClick={() => goToPage(currentPage + 1)}
-      >
-        Next
-      </button>
+      <div>
+        <button onClick={prevPage} disabled={pageNumber === 1}>
+          Previous
+        </button>
+        <button onClick={nextPage} disabled={pageNumber === Math.ceil(data.length / itemsPerPage)}>
+          Next
+        </button>
+      </div>
     </div>
   );
 }
+
 export default App;
