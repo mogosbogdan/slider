@@ -1,50 +1,55 @@
 import React, { useState } from 'react';
 
-function App() {
-  const [pageNumber, setPageNumber] = useState(1);
-  const itemsPerPage = 8;
+const App = () => {
+  const totalNumbers = 10;
+  const numbersPerPage = 8;
+  const totalPages = Math.ceil(totalNumbers / numbersPerPage);
 
-  // Create an array of 10 numbers
-  const data = Array.from({ length: 10 }, (_, index) => index + 1);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Calculate the index range for the current page
-  const startIndex = (pageNumber - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  const generateNumbers = (page) => {
+    const start = (page - 1) * numbersPerPage;
+    const end = Math.min(start + numbersPerPage, totalNumbers);
+    const numbers = [];
 
-  // Slice the data array to display 8 numbers on the current page
-  const pageData = data.slice(startIndex, endIndex);
+    for (let i = start; i < end; i++) {
+      numbers.push(i + 1);
+    }
 
-  // Handle next and previous page actions
-  const nextPage = () => {
-    if (pageNumber < Math.ceil(data.length / itemsPerPage)) {
-      setPageNumber(pageNumber + 1);
+    return numbers;
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
     }
   };
 
-  const prevPage = () => {
-    if (pageNumber > 1) {
-      setPageNumber(pageNumber - 1);
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
     }
   };
 
   return (
     <div>
-      <h1>Numbers</h1>
+      <h1>Numbers Display</h1>
       <ul>
-        {pageData.map((number) => (
+        {generateNumbers(currentPage).map((number) => (
           <li key={number}>{number}</li>
         ))}
       </ul>
       <div>
-        <button onClick={prevPage} disabled={pageNumber === 1}>
+        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
           Previous
         </button>
-        <button onClick={nextPage} disabled={pageNumber === Math.ceil(data.length / itemsPerPage)}>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
           Next
         </button>
       </div>
     </div>
   );
-}
+};
 
 export default App;
