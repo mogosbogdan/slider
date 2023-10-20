@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 function App() {
-  const initialData = Array.from({ length: 25 }, (_, i) => i + 1); // Create an array with 10 numbers
+  const initialData = Array.from({ length: 26 }, (_, i) => i + 1); 
   const itemsPerPage = 8;
-  const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(initialData.length / itemsPerPage);
+  const [currentPage, setCurrentPage] = useState(totalPages);
   const remainder = initialData.length % itemsPerPage;
   let startIndex;
   let endIndex;
@@ -11,7 +11,10 @@ function App() {
     startIndex = 0;
     endIndex = remainder || itemsPerPage;
   } else {
-    startIndex = remainder === 0 ? remainder + itemsPerPage : remainder + (currentPage - 2) * itemsPerPage;
+    startIndex =
+      remainder === 0
+        ? remainder + itemsPerPage
+        : remainder + (currentPage - 2) * itemsPerPage;
     endIndex = startIndex + itemsPerPage;
   }
   const currentData = initialData.slice(startIndex, endIndex);
