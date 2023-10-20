@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const App = () => {
   const totalNumbers = 10;
   const numbersPerPage = 8;
   const totalPages = Math.ceil(totalNumbers / numbersPerPage);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(totalPages); // Set to the last page initially
 
   const generateNumbers = (page) => {
     const start = (page - 1) * numbersPerPage;
