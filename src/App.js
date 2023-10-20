@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useState } from 'react';
 function App() {
+  const initialData = Array.from({ length: 25 }, (_, i) => i + 1); // Create an array with 10 numbers
+  const itemsPerPage = 8;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(initialData.length / itemsPerPage);
+  const remainder = initialData.length % itemsPerPage;
+  let startIndex;
+  let endIndex;
+  if (currentPage === 1) {
+    startIndex = 0;
+    endIndex = remainder || itemsPerPage;
+  } else {
+    startIndex = remainder === 0 ? remainder + itemsPerPage : remainder + (currentPage - 2) * itemsPerPage;
+    endIndex = startIndex + itemsPerPage;
+  }
+  const currentData = initialData.slice(startIndex, endIndex);
+  const goToPage = (page) => {
+    setCurrentPage(page);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <ul>
+        {currentData.map((number, index) => (
+          <li key={index}>{number}</li>
+        ))}
+      </ul>
+      <button
+        disabled={currentPage === 1}
+        onClick={() => goToPage(currentPage - 1)}
+      >
+        Previous
+      </button>
+      <button
+        disabled={currentPage === totalPages}
+        onClick={() => goToPage(currentPage + 1)}
+      >
+        Next
+      </button>
     </div>
   );
 }
-
 export default App;
